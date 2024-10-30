@@ -1,5 +1,5 @@
 """
-Project: "https://www.github.com/gamingoninuslin/PixARKServerManager",
+Project: "https:www.github.com/gamingoninuslin/PixARKServerManager",
 Author(s): ["GamingOnInsulin"],
 Description: "This is simple PixARK Server Manager that allows the user easly set the server settings like ports and world map and other sever related settings.",
 Version: V1.0.0a,
@@ -7,10 +7,10 @@ License: MIT (https://opensource.org/license/mit)
 """
 import tkinter as tk
 from tkinter import ttk, filedialog
+from multiprocessing import Queue
 import threading
 import subprocess
 import os
-import queue
 
 
 class PixArkServerManager:

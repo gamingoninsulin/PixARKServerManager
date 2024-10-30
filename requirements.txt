@@ -1,5 +1,2 @@
-tkinter
-threading
-subprocess
-os
-queue
+tk
+thread6
