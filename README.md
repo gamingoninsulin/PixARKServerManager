@@ -1,3 +1,10 @@
+<div align=center>
+  
+![PixARK](https://github.com/user-attachments/assets/b3416781-ba11-455b-80d5-15754e46fbed)
+# Server Manager
+</div>
+<br>
+
 Project: "https://www.github.com/gamingoninuslin/PixARKServerManager",<br>
 Author(s): ["GamingOnInsulin"],<br>
 Description: "This is simple PixARK Server Manager that allows the user easly set the server settings like ports and world map and other sever related settings.",<br>
