@@ -22,42 +22,54 @@ class PixArkServerManager:
         self.icon_path = "./PixARK.ico"
         root.iconbitmap(self.icon_path)
                 
-    # Server Path and Status
+    # Server Path and Status (frame)
         self.server_path_frame = ttk.Frame(root)
         self.server_path_frame.pack(fill="x", padx=10, pady=10)
 
+    # server path label
         self.server_path_label = ttk.Label(self.server_path_frame, text="Server Path:")
         self.server_path_label.pack(side="left")
 
+    # servr path entry
         self.server_path_entry = ttk.Entry(self.server_path_frame)
         self.server_path_entry.pack(side="left", fill="x", expand=True)
 
+    # server path button
         self.server_path_button = ttk.Button(self.server_path_frame, text="Set Location", command=self.set_server_path)
         self.server_path_button.pack(side="left")
-
+    
+    # server status label
         self.server_status_label = ttk.Label(self.server_path_frame, text="Server Status: Not Running")
         self.server_status_label.pack(side="left", padx=10)
 
-        # Server Control Buttons
+    # Server Control Buttons (frame)
         self.button_frame = ttk.Frame(root)
         self.button_frame.pack(fill="x", padx=10, pady=10)
-
+    
+    # start button
         self.start_button = ttk.Button(self.button_frame, text="Start", command=self.start_server)
         self.start_button.pack(side="left")
 
-        self.stop_button = ttk.Button(self.button_frame, text="Stop", command=self.stop_server)
+    # stop button
+        self.stop_button = ttk.Button(self.button_frame, text="Stop", state="disabled", command=self.stop_server)
         self.stop_button.pack(side="left")
+        
+        #self.stop_button = ttk.Button(self.button_frame, text="Stop", command=self.stop_server)
+        #self.stop_button.pack(side="left")
     
-        self.restart_button = ttk.Button(self.button_frame, text="Restart", command=self.restart_server)
+    # restart button
+        self.restart_button = ttk.Button(self.button_frame, text="Restart", state="disabled", command=self.restart_server)
         self.restart_button.pack(side="left")
 
-    # Administration Tab
+    # Administration Tab (frame)
         self.admin_tab = ttk.Notebook(root)
         self.admin_tab.pack(fill="both", expand=True, padx=10, pady=10)
 
+    # server admin tab
         self.admin_page = ttk.Frame(self.admin_tab)
         self.admin_tab.add(self.admin_page, text="Server Settings")
-        
+    
+    # divider
         divider_frame = ttk.Frame(self.admin_page, height=60)
         divider_frame.grid(row=0, column=0, columnspan=2, sticky="ew")  # Adjust row as needed
 
@@ -126,18 +138,23 @@ class PixArkServerManager:
         self.rcon_port_entry = ttk.Entry(self.admin_page)
         self.rcon_port_entry.grid(row=9, column=1, sticky="w", ipadx=9)
         self.rcon_port_entry.insert(0, "7777")  # Default Rcon port
-        
+    
+    # divider
         divider_frame = ttk.Frame(self.admin_page, height=15)
         divider_frame.grid(row=19, column=0, columnspan=2, sticky="ew")  # Adjust row as needed
 
+    ## TURNED OFF ##
+    # server console
         # self.console_text = tk.Text(self.admin_page, height=17, width=96, state=tk.DISABLED)
         # self.console_text.grid(row=20, column=0, sticky="nsew", columnspan=2)
-
+    
+    # this function gets the server path.
     def set_server_path(self):
         server_exe_path = filedialog.askopenfilename(filetypes=[("PixARK Server Executable", "*.exe")])
         self.server_path_entry.delete(0, tk.END)
         self.server_path_entry.insert(0, server_exe_path)
 
+    # this function runs a start server command with the at the alication chosen by server path.
     def start_server(self):
         port = self.port_entry.get()
         cube_port = self.cube_port_entry.get()
@@ -149,8 +166,11 @@ class PixArkServerManager:
         server_pass = self.password_entry.get()
         admin_pass = self.admin_password_entry.get()
         players_no = self.number_of_players_entry.get()
-            
+        
+        # checks if PixARKServer.exe is in directory
         if not os.path.isfile(str(server_path)):
+            
+            # prints error if not PixARKServer.exe file in side directory
             print(f"Error: PixARKServer.exe not found at {server_path}")
             return
             
@@ -160,27 +180,30 @@ class PixArkServerManager:
             1: "SkyPiea_Light",
         }
         command_line_args = f"{world_map[world_name]}?listen?MaxPlayers={players_no}?Port={port}?QueryPort={querry_port}?RCONPort={rcon_port}?SessionName={server_name}?ServerAdminPassword={admin_pass}?CULTUREFORCOOKING=en -NoBattlEye -NoHangDetection -CubePort={cube_port} -cubeworld={server_name} -nosteamclient -game -server -log"
-
+        
+        # turns the server on with subproces
         self.server_process = subprocess.Popen([server_path, command_line_args])
         self.server_status_label.config(text="Server Status: Running")
-            
+        self.stop_button.config(state="enabled")
+        self.restart_button.config(state="enabled")
 
-        if not os.path.isfile(str(server_path)):
-            # Handle case where server_exe is not found
-            print(f"Error: PixARKServer.exe not found at {server_path}")
-        return
-
+    # this function stops the server.
     def stop_server(self):
-        if self.server_process:
-            self.server_process.terminate()
-            self.server_process = None
-            self.server_status_label.config(text="Server Status: Stopped")
-        else:
-            print("Server is not running")
+      # Check if server_process exists before termination
+      if self.server_process:
+        self.server_process.terminate()
+        self.server_process = None
+        self.server_status_label.config(text="Server Status: Stopped")
+        self.stop_button.config(state="disabled")
+        self.restart_button.config(state="disabled")
+      else:
+        print("Server is not running")
 
     def restart_server(self):
         self.stop_server()
         self.start_server()
+        self.stop_button.config(state="enabled")
+        self.restart_button.config(state="enabled")
 
     def quit(self):
         self.destroy()
