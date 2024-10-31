@@ -13,7 +13,10 @@ License: MIT (https://opensource.org/license/mit)<br>
 <br>
 <br>
 
-# usage
+# usage (get latest release)
+#### go to [latest release](https://github.com/gamingoninsulin/PixARKServerManager/releases)
+#### and download the zip file its containts a *.exe  and a *.ico they need to stay together!
+# usage (building you self)
 ##### install [python v313](https://www.python.org/downloads/)
 ##### install requirements.txt
 ## Windows
