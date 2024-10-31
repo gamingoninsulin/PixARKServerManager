@@ -11,6 +11,7 @@ from multiprocessing import Queue
 import threading
 import subprocess
 import os
+import psutil
 
 
 class PixArkServerManager:
@@ -21,7 +22,8 @@ class PixArkServerManager:
         self.root.resizable(False, False)
         self.icon_path = "./PixARK.ico"
         root.iconbitmap(self.icon_path)
-                
+        root.protocol("WM_DELETE_WINDOW", self.quit)
+    
     # Server Path and Status (frame)
         self.server_path_frame = ttk.Frame(root)
         self.server_path_frame.pack(fill="x", padx=10, pady=10)
@@ -205,14 +207,17 @@ class PixArkServerManager:
         self.stop_button.config(state="enabled")
         self.restart_button.config(state="enabled")
     
-    # NOT WORKING YET
+    ## NOT WORKING YET
     # this function quits out this program
-    #def quit(self):
-    #    if self.server_process:
-    #        self.stop_server()
-    #        self.destroy()
-    #    else:
-    #        self.destroy()
+    def quit(self):
+        # Terminate child processes using psutil
+        parent_pid = os.getpid()
+        for child in psutil.process_iter(attrs=['pid', 'ppid']):
+            if child.info['ppid'] == parent_pid:
+                child.kill()
+
+        # Close the Tkinter window
+        self.root.destroy()
 
 
 if __name__ == "__main__":
