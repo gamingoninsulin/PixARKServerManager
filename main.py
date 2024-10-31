@@ -117,7 +117,6 @@ class PixArkServerManager:
         self.port_entry.grid(row=6, column=1, sticky="w", ipadx=9)
         self.port_entry.insert(0, "27016")  # Default port
 
-
     # Cube Port
         cube_port_label = ttk.Label(self.admin_page, text="Cube Port:")
         cube_port_label.grid(row=7, column=0, sticky="w", padx=80)
@@ -198,15 +197,22 @@ class PixArkServerManager:
         self.restart_button.config(state="disabled")
       else:
         print("Server is not running")
-
+    
+    # this function restarts the server
     def restart_server(self):
         self.stop_server()
         self.start_server()
         self.stop_button.config(state="enabled")
         self.restart_button.config(state="enabled")
-
-    def quit(self):
-        self.destroy()
+    
+    # NOT WORKING YET
+    # this function quits out this program
+    #def quit(self):
+    #    if self.server_process:
+    #        self.stop_server()
+    #        self.destroy()
+    #    else:
+    #        self.destroy()
 
 
 if __name__ == "__main__":
